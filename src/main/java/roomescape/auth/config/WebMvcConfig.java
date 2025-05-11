@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import roomescape.auth.application.AuthService;
@@ -11,6 +12,7 @@ import roomescape.auth.domain.AuthTokenExtractor;
 import roomescape.auth.domain.AuthTokenProvider;
 import roomescape.auth.ui.CheckAuthRoleInterceptor;
 import roomescape.auth.ui.MemberArgumentResolver;
+import roomescape.exception.GlobalExceptionResolver;
 
 @Configuration
 @RequiredArgsConstructor
@@ -31,5 +33,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addArgumentResolvers(final List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(new MemberArgumentResolver(authTokenExtractor, authTokenProvider, authService));
+    }
+
+    @Override
+    public void extendHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
+        resolvers.add(new GlobalExceptionResolver());
     }
 }
